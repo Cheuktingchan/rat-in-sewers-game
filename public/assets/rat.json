@@ -1,0 +1,52 @@
+{"frames": [
+
+{
+	"filename": "rat_64.png",
+	"frame": {"x":0,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "rat_walkFrame1_64.png",
+	"frame": {"x":64,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "rat_walkFrame2_64.png",
+	"frame": {"x":128,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "rat_walkFrame3_64.png",
+	"frame": {"x":192,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "rat_walkFrame4_64.png",
+	"frame": {"x":256,"y":0,"w":64,"h":64},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":64,"h":64},
+	"sourceSize": {"w":64,"h":64}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "rat.png",
+	"format": "RGBA8888",
+	"size": {"w":320,"h":64},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:2f6e2a4cf7b80056cfddcc35ac12178f:ddc8d309bc0dbfdac603e27e3fd75db7:897eb3d5a631cb8958a6b43d97451b25$"
+}
+}
