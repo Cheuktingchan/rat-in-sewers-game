@@ -52,20 +52,21 @@ export default class Game extends Phaser.Scene{
 
   update(){
     const speed = 10;
-    if (this.cursors.left.isDown){
+
+    if (this.cursors.left.isDown){ // rat walks left
       this.rat.flipX = true;
       this.rat.setVelocityX(-speed);
       this.rat.play('player-walk', true);
-    }else if (this.cursors.right.isDown){
+    }else if (this.cursors.right.isDown){ // rat walks right
       this.rat.flipX = false;
       this.rat.setVelocityX(speed);
       this.rat.play('player-walk', true);
     }else{
-      this.rat.play('player-idle', true);
+      this.rat.play('player-idle', true); //rat idles
     }
 
     const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-    if (space_pressed && this.is_touching_ground){
+    if (space_pressed && this.is_touching_ground){ // rat jumps
       this.rat.setVelocityY(-10);
       this.is_touching_ground = false;
     }

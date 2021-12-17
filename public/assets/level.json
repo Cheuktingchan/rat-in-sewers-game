@@ -20,15 +20,15 @@
          "name":"objects",
          "objects":[
                 {
-                 "height":48,
+                 "height":64,
                  "id":1,
                  "name":"rat-spawn",
                  "rotation":0,
                  "type":"",
                  "visible":true,
-                 "width":50.6666666666667,
-                 "x":72,
-                 "y":198.666666666667
+                 "width":64,
+                 "x":61.3333,
+                 "y":190.667
                 }],
          "opacity":1,
          "type":"objectgroup",
@@ -163,19 +163,6 @@
                          "value":false
                         }]
                 }],
-         "tilewidth":64
-        }, 
-        {
-         "columns":12,
-         "firstgid":13,
-         "image":"sheet.png",
-         "imageheight":64,
-         "imagewidth":768,
-         "margin":0,
-         "name":"sheet",
-         "spacing":0,
-         "tilecount":12,
-         "tileheight":64,
          "tilewidth":64
         }],
  "tilewidth":64,
