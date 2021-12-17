@@ -1,9 +1,12 @@
 import Phaser from 'phaser'
+import PlayerController from '~/PlayerController';
 
 export default class Game extends Phaser.Scene{
   private cursors!: Phaser.Types.Input.Keyboard.CursorKeys; //! because in Phaser this will work fine
   
   private rat!: Phaser.Physics.Matter.Sprite;
+
+  private playerController?: PlayerController;
 
   private is_touching_ground = false;
 
@@ -21,7 +24,7 @@ export default class Game extends Phaser.Scene{
   }
 
   create(){
-    this.createRatAnimations();
+
     const map = this.make.tilemap({key: 'tilemap'}); // making tilemap
     const tileset = map.addTilesetImage('sheet', 'tiles'); // setting a tileset using sheet. tileset from Tiled
 
@@ -40,55 +43,19 @@ export default class Game extends Phaser.Scene{
         case 'rat-spawn': // if object has name rat-spawn
           this.rat = this.matter.add.sprite(x! + width * 0.5,y!, 'rat'); // adding the rat
           this.rat.setFixedRotation(); // fix rotation of rat
-      
-          this.rat.setOnCollide((data: MatterJS.ICollisionPair) => {
-            this.is_touching_ground = true;
-          });
+
+          this.playerController = new PlayerController(this.rat, this.cursors); //create the playerController for the rat
       }
 
-    })
-    this.cameras.main.startFollow(this.rat);
+    });
+    this.cameras.main.startFollow(this.rat); //camera follows the rat
   }
 
-  update(){
-    const speed = 10;
-
-    if (this.cursors.left.isDown){ // rat walks left
-      this.rat.flipX = true;
-      this.rat.setVelocityX(-speed);
-      this.rat.play('player-walk', true);
-    }else if (this.cursors.right.isDown){ // rat walks right
-      this.rat.flipX = false;
-      this.rat.setVelocityX(speed);
-      this.rat.play('player-walk', true);
-    }else{
-      this.rat.play('player-idle', true); //rat idles
+  update(t: number, dt: number){
+    if (!this.playerController){
+      return;
     }
 
-    const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-    if (space_pressed && this.is_touching_ground){ // rat jumps
-      this.rat.setVelocityY(-10);
-      this.is_touching_ground = false;
-    }
-  }
-
-  private createRatAnimations(){ // method for creating the rat animations including walking and idle
-
-    this.anims.create({ // walking
-      key: 'player-walk',
-      frameRate: 10,
-      frames: this.anims.generateFrameNames('rat',{
-        start:1,
-        end:4, 
-        prefix: 'rat_walkFrame',
-        suffix: '_64.png'}),
-      repeat: -1
-    });
-
-    this.anims.create({ // idle
-      key: 'player-idle',
-      frames: [{key: 'rat', frame: 'rat_64.png'}],
-      repeat: -1
-    });
+    this.playerController.update(dt);
   }
 }

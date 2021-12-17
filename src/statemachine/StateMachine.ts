@@ -2,7 +2,7 @@
 The following code is a state machine for organising states used in the rat game.
 credit to supertommy on github.
 */
-interface IState
+interface IState 
 {
 	name: string
 	onEnter?: () => void
@@ -12,7 +12,7 @@ interface IState
 
 let idCount = 0
 
-export default class StateMachine
+export default class StateMachine // class that manages states 
 {
 	private id = (++idCount).toString()
 	private context?: object
@@ -33,13 +33,13 @@ export default class StateMachine
 		return this.previousState.name
 	}
 
-	constructor(context?: object, id?: string)
+	constructor(context?: object, id?: string) // for example playercontroller object is passed in as context, id is 'player'
 	{
 		this.id = id ?? this.id
 		this.context = context
 	}
 
-	isCurrentState(name: string)
+	isCurrentState(name: string) //method that returns whether a name of state is the current state
 	{
 		if (!this.currentState)
 		{
@@ -49,7 +49,7 @@ export default class StateMachine
 		return this.currentState.name === name
 	}
 
-	addState(name: string, config?: { onEnter?: () => void, onUpdate?: (dt: number) => void, onExit?: () => void })
+	addState(name: string, config?: { onEnter?: () => void, onUpdate?: (dt: number) => void, onExit?: () => void }) // method that adds a state to the machine
 	{
 		const context = this.context
 		
@@ -63,7 +63,7 @@ export default class StateMachine
 		return this
 	}
 
-	setState(name: string)
+	setState(name: string) // method that changes the state to the name
 	{
 		if (!this.states.has(name))
 		{
@@ -102,7 +102,7 @@ export default class StateMachine
 		this.isChangingState = false
 	}
 
-	update(dt: number)
+	update(dt: number) //updates the current state
 	{
 		if (this.changeStateQueue.length > 0)
 		{
