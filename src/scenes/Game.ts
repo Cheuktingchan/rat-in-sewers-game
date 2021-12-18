@@ -48,6 +48,7 @@ export default class Game extends Phaser.Scene{
       }
 
     });
+    this.cameras.main.zoom = 0.5;
     this.cameras.main.startFollow(this.rat); //camera follows the rat
   }
 

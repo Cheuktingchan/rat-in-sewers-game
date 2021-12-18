@@ -6,7 +6,7 @@ export default class PlayerController{
   private stateMachine: StateMachine; // one state machine object for each sprite to control
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   
-  touching_a_side = false;
+  touching_side = 'none';
 
   constructor(sprite: Phaser.Physics.Matter.Sprite, cursors: Phaser.Types.Input.Keyboard.CursorKeys){
     this.sprite = sprite;
@@ -29,58 +29,56 @@ export default class PlayerController{
     })
     this.stateMachine.addState('wall-climb', {
       onEnter: this.wallClimbOnEnter,
-      onUpdate: this.wallClimbOnUpdate
+      onUpdate: this.wallClimbOnUpdate,
+      onExit: this.wallClimbOnExit
     })
     this.stateMachine.setState('idle'); //starting state is idle
     
     this.sprite.setOnCollide((pair: MatterJS.ICollisionPair) => { // set state back to idle when returning to ground from a jump
-      //console.log(pair);
       if (pair.collision.normal.x == 0 && pair.collision.normal.y == 1 && pair.confirmedActive){ // if hit floor
         if (this.stateMachine.isCurrentState('jump')){
           this.stateMachine.setState('idle');
         }
+      }
+      if (pair.collision.normal.x == 1){
+        this.stateMachine.setState('wall-climb');
+        this.touching_side = 'right';
       } 
-      if (pair.collision.normal.x != 0 && pair.collision.normal.x != -0){ //if hit sides
-          this.stateMachine.setState('wall-climb');
-          this.touching_a_side = true;
+      if (pair.collision.normal.x == -1){
+        this.stateMachine.setState('wall-climb');
+        this.touching_side = 'left';
       }
     });
     this.sprite.setOnCollideActive((pair: MatterJS.ICollisionPair) => { // set state back to idle when returning to ground from a jump
-      if (pair.collision.normal.x != 0 && pair.collision.normal.x != -0){ //if hit sides
-        console.log("hello");
-        this.touching_a_side = true;
+      if (pair.collision.normal.x == 1){
+        this.touching_side = 'right';
+      } 
+      if (pair.collision.normal.x == -1){
+        this.touching_side = 'left';
       }
     });
     this.sprite.setOnCollideEnd((pair: MatterJS.ICollisionPair) => { // set state back to idle when returning to ground from a jump
       if (pair.collision.normal.x != 0 && pair.collision.normal.x != -0){ //if hit sides
-        this.touching_a_side = false;
-        console.log("collide ended with a side");
+        this.touching_side = 'none';
       }
     });
   }
 
   update(dt: number){
     this.stateMachine.update(dt);
-    console.log(this.touching_a_side);
   }
   private idleOnEnter(){
     this.sprite.anims.play('player-idle');
   }
 
   private idleOnUpdate(){
-    if (this.cursors.left.isDown || this.cursors.right.isDown){ // 
-      if (this.touching_a_side){
+    if ((this.cursors.left.isDown && this.touching_side == 'left') || (this.cursors.right.isDown && this.touching_side == 'right')){ // 
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
-      }else{
-        this.stateMachine.setState('walk');
-      }
+    }else if (this.cursors.left.isDown || this.cursors.right.isDown){
+      this.stateMachine.setState('walk');
     }
-
-    const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-    if (space_pressed){
-      this.stateMachine.setState('jump');
-    }
+    this.jumpDetection();
   }
 
   private walkOnEnter(){
@@ -93,18 +91,23 @@ export default class PlayerController{
     if (this.cursors.left.isDown){ // rat walks left
       this.sprite.flipX = true;
       this.sprite.setVelocityX(-speed);
+      if (this.touching_side == 'left'){
+        this.sprite.body.velocity.x = 0;
+        this.stateMachine.setState('wall-climb');
+      }
     }else if (this.cursors.right.isDown){ // rat walks right
       this.sprite.flipX = false;
       this.sprite.setVelocityX(speed);
+      if (this.touching_side == 'right'){
+        this.sprite.body.velocity.x = 0;
+        this.stateMachine.setState('wall-climb');
+      }
     }else{ //rat idles
       this.sprite.setVelocityX(0);
       this.stateMachine.setState('idle');
     }
 
-    const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
-    if (space_pressed){ // rat jumps
-      this.stateMachine.setState('jump');
-    }
+    this.jumpDetection();
   }
 
   private jumpOnEnter(){
@@ -126,26 +129,35 @@ export default class PlayerController{
   private wallClimbOnEnter(){
     this.sprite.anims.play('player-walk');
     this.sprite.setIgnoreGravity(true);
-    if (this.sprite.body.velocity.x > 0){
-      this.sprite.angle = -90;
-    }else{
+    if (this.cursors.left.isDown){
       this.sprite.angle = 90;
+    }else if (this.cursors.right.isDown){ // not considering case 0 here - error
+      this.sprite.angle = -90;
     }
   }
 
   private wallClimbOnUpdate(){
-    var current_dir_held = false;
-    if (this.sprite.flipX && this.cursors.left.isDown){
-      current_dir_held = true;
-    }else if (!this.sprite.flipX && this.cursors.right.isDown){
-      current_dir_held = true;
-    }
-    if (this.touching_a_side && current_dir_held){
-      this.sprite.setVelocityY(-1);
+    if ((this.cursors.left.isDown && this.touching_side == 'left') || (this.cursors.right.isDown && this.touching_side == 'right')){
+      this.sprite.setVelocityY(-3);
     }else{
-      this.sprite.setIgnoreGravity(false);
-      this.sprite.angle = 0;
-      this.stateMachine.setState('idle');
+      if (this.cursors.left.isDown || this.cursors.right.isDown){
+        this.stateMachine.setState('walk');
+      }else{
+        this.stateMachine.setState('idle');
+      }
+    }
+    this.jumpDetection();
+  }
+
+  private wallClimbOnExit(){
+    this.sprite.setIgnoreGravity(false);
+    this.sprite.angle = 0;
+  }
+
+  private jumpDetection(){
+    const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);
+    if (space_pressed){
+      this.stateMachine.setState('jump');
     }
   }
 
