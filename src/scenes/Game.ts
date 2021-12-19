@@ -11,8 +11,6 @@ export default class Game extends Phaser.Scene{
 
   private hazards!: HazardsController;
 
-  private is_touching_ground = false;
-
   constructor(){
     super('game'); //identifier for extended class from Phase.Scene
   }

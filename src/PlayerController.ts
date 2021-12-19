@@ -11,7 +11,7 @@ export default class PlayerController{
 
   touching_side = 'none';
   berserk = false;
-  timer_length = 100;
+  timer_length = 10;
 
   constructor(scene: Phaser.Scene, sprite: Phaser.Physics.Matter.Sprite, cursors: Phaser.Types.Input.Keyboard.CursorKeys, hazards: HazardsController){
     this.scene = scene;

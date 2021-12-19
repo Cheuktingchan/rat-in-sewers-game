@@ -2,7 +2,7 @@ import Phaser from 'phaser';
 
 export default class UI extends Phaser.Scene{
   private timer!: Phaser.GameObjects.Text;
-  private time_left = 100;
+  private time_left = 10;
   constructor(){
     super({key:'ui'});
   }
