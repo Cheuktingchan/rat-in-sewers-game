@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "A typescript template project for Phaser 3 using Parceljs",
   "scripts": {
-    "start": "parcel src/index.html -p 8000",
-    "build": "parcel build src/index.html --out-dir dist",
+    "start": "parcel src/index.html -- open",
+    "build": "parcel build src/index.html",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint ./src --ext .js,.jsx,.ts,.tsx",
+    "heroku-postbuild": "parcel build src/index.html",
+    "parcel-bundler": "1.12.5"
   },
   "author": "supertommy",
   "license": "MIT",
@@ -25,6 +27,7 @@
     "typescript": "^3.8.3"
   },
   "dependencies": {
+    "parcel-bundler": "^1.12.5",
     "phaser": "^3.55.2"
   },
   "parcelCleanPaths": [
