@@ -142,7 +142,9 @@ export default class PlayerController{
     }else if (this.cursors.left.isDown || this.cursors.right.isDown){
       this.stateMachine.setState('walk');
     }
-    this.jumpDetection();
+    if (!this.berserk){
+      this.jumpDetection();
+    }
   }
 
   private walkOnEnter(){
@@ -152,7 +154,7 @@ export default class PlayerController{
   private walkOnUpdate(){
     const speed = 5;
 
-    if (this.cursors.left.isDown){ // rat walks left
+    if (this.cursors.left.isDown && !this.berserk){ // rat walks left
       this.sprite.flipX = true;
       this.sprite.setVelocityX(-speed);
       if (this.touching_side == 'left'){
@@ -171,7 +173,9 @@ export default class PlayerController{
       this.stateMachine.setState('idle');
     }
 
-    this.jumpDetection();
+    if (!this.berserk){
+      this.jumpDetection();
+    }
   }
 
   private jumpOnEnter(){
@@ -204,7 +208,9 @@ export default class PlayerController{
     if ((this.cursors.left.isDown && this.touching_side == 'left') || ((this.cursors.right.isDown || this.berserk) && this.touching_side == 'right')){
       this.sprite.setVelocityY(-3);
     }else{
-      this.jumpDetection();
+      if (!this.berserk){
+        this.jumpDetection();
+      }
       if (this.cursors.left.isDown || this.cursors.right.isDown || this.berserk){
         this.stateMachine.setState('walk');
       }else{
