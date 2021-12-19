@@ -38,5 +38,8 @@
     "url": "https://github.com/ourcade/phaser3-parcel-template/issues"
   },
   "main": ".eslintrc.js",
-  "keywords": []
+  "keywords": [],
+  "engines": {
+    "node": "17.2"
+  }
 }
