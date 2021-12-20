@@ -20,7 +20,8 @@ export default class UI extends Phaser.Scene{
           this.timer.text = `Berserk in: ${this.time_left}`
         }else{
           this.time_left --;
-          this.timer.text = `Berserk!`
+          this.timer.text = `Berserk!`;
+          this.timer.setColor('#ff0000');
         }
       },
       loop: true
