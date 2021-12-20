@@ -32,7 +32,7 @@ export default class Game extends Phaser.Scene{
 
     const ground = map.createLayer('ground', tileset); //creating a layer within the tilemap using Tiled layer
 
-    const hazards = map.createLayer('hazards', tileset);
+    map.createLayer('hidden', tileset);
 
     ground.setCollisionByProperty({collides:true}); // collides in the Tiled embbed tileset is a boolean that has been ticked for ground tiles
 

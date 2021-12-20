@@ -18,7 +18,7 @@ export default class PlayerController{
     this.sprite = sprite;
     this.stateMachine = new StateMachine(this, 'player');
     this.hazards = hazards;
-    //this.sprite.setFrictionAir(0.1);
+    this.sprite.setFriction(0);
     this.cursors = cursors;
     this.createAnimations();
     this.scene.time.addEvent({
