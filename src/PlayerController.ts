@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import HazardsController from './HazardsController';
 import StateMachine from './statemachine/StateMachine'; // importing state machine
-
+import { sharedInstance as events } from './EventCenter';
 export default class PlayerController{
   private scene: Phaser.Scene;
   private sprite: Phaser.Physics.Matter.Sprite; // takes a matter sprite like the rat
@@ -236,7 +236,7 @@ export default class PlayerController{
       delay: 500,
       callback: ()=>{
           this.scene.scene.start('game-over');
-          this.scene.scene.remove('ui');
+          events.emit('game-over');
       },
       loop: false
   })
@@ -253,7 +253,7 @@ export default class PlayerController{
     this.sprite.flipY = true;
     this.sprite.anims.play('player-dead');
     this.scene.scene.start('win');
-    this.scene.scene.remove('ui');
+    events.emit('game-over');
   }
   private jumpDetection(){
     const space_pressed = Phaser.Input.Keyboard.JustDown(this.cursors.space);

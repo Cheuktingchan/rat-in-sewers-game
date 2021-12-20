@@ -1,5 +1,5 @@
 import Phaser from 'phaser';
-
+import { sharedInstance as events } from '~/EventCenter';
 export default class GameOver extends Phaser.Scene{
   constructor(){
     super('game-over');
@@ -18,6 +18,7 @@ export default class GameOver extends Phaser.Scene{
     play_again.setInteractive();
     play_again.on(Phaser.Input.Events.GAMEOBJECT_POINTER_UP, () => {
       this.scene.start('game');
+      events.emit('game-start');
     });
 
     const play_again_text = this.add.text(play_again.x,play_again.y, 'Play Again', {

@@ -1,4 +1,5 @@
 import Phaser from 'phaser';
+import { sharedInstance as events } from '~/EventCenter';
 
 export default class UI extends Phaser.Scene{
   private timer!: Phaser.GameObjects.Text;
@@ -23,6 +24,14 @@ export default class UI extends Phaser.Scene{
         }
       },
       loop: true
+  });
+
+  events.on('game-over', ()=> {
+    this.scene.stop();
+  });
+
+  events.on('game-over', ()=> {
+    this.time_left = 10;
   });
   }
 }
