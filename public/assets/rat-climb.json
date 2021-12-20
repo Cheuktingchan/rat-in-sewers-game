@@ -1,0 +1,36 @@
+{"frames": [
+
+{
+	"filename": "climb-frame1.png",
+	"frame": {"x":56,"y":1,"w":64,"h":53},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":0,"y":11,"w":64,"h":53},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "climb-frame2.png",
+	"frame": {"x":122,"y":1,"w":57,"h":53},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":7,"y":11,"w":57,"h":53},
+	"sourceSize": {"w":64,"h":64}
+},
+{
+	"filename": "climb-frame3.png",
+	"frame": {"x":1,"y":1,"w":53,"h":61},
+	"rotated": false,
+	"trimmed": true,
+	"spriteSourceSize": {"x":11,"y":3,"w":53,"h":61},
+	"sourceSize": {"w":64,"h":64}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "rat-climb.png",
+	"format": "RGBA8888",
+	"size": {"w":180,"h":63},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:466f6576e17d7923786e2714163aa1ad:5e32aca99539c357be1d4bbf1da88959:00fabf6bd636898ef6f7b8d56d490e61$"
+}
+}

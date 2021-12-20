@@ -9,9 +9,10 @@ export default class PlayerController{
   private cursors: Phaser.Types.Input.Keyboard.CursorKeys;
   private hazards: HazardsController;
 
-  touching_side = 'none';
-  berserk = false;
-  timer_length = 10;
+  touching_side: string = 'none';
+  berserk: boolean = false;
+  timer_length: number = 15;
+  collided_this_frame: boolean = false;
 
   constructor(scene: Phaser.Scene, sprite: Phaser.Physics.Matter.Sprite, cursors: Phaser.Types.Input.Keyboard.CursorKeys, hazards: HazardsController){
     this.scene = scene;
@@ -80,15 +81,24 @@ export default class PlayerController{
           this.stateMachine.setState('idle');
         }
       }
-      if (pair.collision.normal.x == 1){
+      
+/*       if (pair.collision.normal.x == 1){
         this.stateMachine.setState('wall-climb');
         this.touching_side = 'right';
       } 
       if (pair.collision.normal.x == -1){
         this.stateMachine.setState('wall-climb');
         this.touching_side = 'left';
-      }
+      } */
     });
+    this.sprite.on('animationcomplete-player-climb', (animation, frame) => {
+      this.sprite.anims.play('player-walk');
+      if (this.cursors.left.isDown){
+        this.sprite.angle = 90;
+      }else if (this.cursors.right.isDown || this.berserk){ // not considering case 0 here - error
+        this.sprite.angle = -90;
+      }
+    }, this);
     this.sprite.setOnCollideActive((pair: MatterJS.ICollisionPair) => { // set state back to idle when returning to ground from a jump
       const body = pair.bodyB as MatterJS.BodyType; // note: for some reason the rat is usually bodyB but not when the collision is with a hazard
       if (this.hazards.is('spikes', body)){
@@ -108,6 +118,7 @@ export default class PlayerController{
       if (pair.collision.normal.x == -1){
         this.touching_side = 'left';
       }
+      this.collided_this_frame = true;
     });
     this.sprite.setOnCollideEnd((pair: MatterJS.ICollisionPair) => { // set state back to idle when returning to ground from a jump
       const body = pair.bodyB as MatterJS.BodyType; // note: for some reason the rat is usually bodyB but not when the collision is with a hazard
@@ -122,21 +133,25 @@ export default class PlayerController{
         this.stateMachine.setState('win');
         return
       }
-      if (pair.collision.normal.x != 0 && pair.collision.normal.x != -0){ //if hit sides
+/*       if (pair.collision.normal.x != 0 && pair.collision.normal.x != -0){ //if hit sides
         this.touching_side = 'none';
-      }
+      } */
     });
   }
 
   update(dt: number){
+    if (!this.collided_this_frame){ //checks if listener was called this frame
+      this.touching_side = 'none';
+    }
     this.stateMachine.update(dt);
+    this.collided_this_frame = false; // resets so it has to check if listener was called next frame
   }
   private idleOnEnter(){
     this.sprite.anims.play('player-idle');
   }
 
   private idleOnUpdate(){
-    if ((this.cursors.left.isDown && this.touching_side == 'left') || (this.cursors.right.isDown && this.touching_side == 'right')){ // 
+    if ((this.cursors.left.isDown && this.touching_side == 'left' ) || (this.cursors.right.isDown && this.touching_side == 'right')){ // 
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
     }else if (this.cursors.left.isDown || this.cursors.right.isDown){
@@ -195,13 +210,8 @@ export default class PlayerController{
   }
 
   private wallClimbOnEnter(){
-    this.sprite.anims.play('player-walk');
+    this.sprite.anims.play('player-climb');
     this.sprite.setIgnoreGravity(true);
-    if (this.cursors.left.isDown){
-      this.sprite.angle = 90;
-    }else if (this.cursors.right.isDown || this.berserk){ // not considering case 0 here - error
-      this.sprite.angle = -90;
-    }
   }
 
   private wallClimbOnUpdate(){
@@ -291,6 +301,17 @@ export default class PlayerController{
       key: 'player-dead',
       frames: [{key: 'rat', frame: 'rat_walkFrame1_64.png'}],
       repeat: -1
+    });
+
+    this.sprite.anims.create({ // walking
+      key: 'player-climb',
+      frameRate: 8,
+      frames: this.sprite.anims.generateFrameNames('rat-climb',{
+        start:1,
+        end:3, 
+        prefix: 'climb-frame',
+        suffix: '.png'}),
+      repeat: 0
     });
   }
 }

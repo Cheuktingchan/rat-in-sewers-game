@@ -3,7 +3,7 @@ import { sharedInstance as events } from '~/EventCenter';
 
 export default class UI extends Phaser.Scene{
   private timer!: Phaser.GameObjects.Text;
-  private time_left = 10;
+  private time_left = 15;
   constructor(){
     super({key:'ui'});
   }
@@ -32,7 +32,7 @@ export default class UI extends Phaser.Scene{
   });
 
   events.on('game-over', ()=> {
-    this.time_left = 10;
+    this.time_left = 15;
   });
   }
 }
