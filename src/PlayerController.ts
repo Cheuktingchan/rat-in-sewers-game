@@ -200,12 +200,20 @@ export default class PlayerController{
 
   private jumpOnUpdate(){
     const speed = 5;
-    if (this.cursors.left.isDown){ // rat faces left
+    if (this.cursors.left.isDown && !this.berserk){ // rat faces left
       this.sprite.flipX = true;
       this.sprite.setVelocityX(-speed);
+      if (this.touching_side == 'left'){
+        this.sprite.body.velocity.x = 0;
+        this.stateMachine.setState('wall-climb');
+      }
     }else if (this.cursors.right.isDown){ // rat faces right
       this.sprite.flipX = false;
       this.sprite.setVelocityX(speed);
+      if (this.touching_side == 'right'){
+        this.sprite.body.velocity.x = 0;
+        this.stateMachine.setState('wall-climb');
+      }
     }
   }
 
