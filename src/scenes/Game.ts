@@ -31,9 +31,9 @@ export default class Game extends Phaser.Scene{
     this.scene.launch('ui');
   }
   preload(){
-    this.load.atlas('rat', imagePath('rat'), 'assets/rat.json');// loading rat sprite sheet
-    this.load.atlas('rat-climb', imagePath('rat-climb'), 'assets/rat-climb.json');// loading rat sprite sheet
-    this.load.image('tiles',imagePath('sheet'));//loading tile sheet
+    this.load.atlas('rat', 'assets/rat.png', 'assets/rat.json');// loading rat sprite sheet
+    this.load.atlas('rat-climb', 'assets/rat-climb.png', 'assets/rat-climb.json');// loading rat sprite sheet
+    this.load.image('tiles','assets/sheet.png');//loading tile sheet
     this.load.tilemapTiledJSON('tilemap','assets/level.json');//loading tilemap
   }
 

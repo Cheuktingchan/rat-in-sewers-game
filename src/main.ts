@@ -22,9 +22,9 @@ const config: Phaser.Types.Core.GameConfig = {
 	},
 	scene: [Game,GameOver, UI, Win],
 	scale: {
-		zoom: 1/DPR,
-		width: width * DPR,
-		height: height * DPR,
+		zoom: 1,
+		width: width,
+		height: height,
 		autoCenter: Phaser.Scale.Center.CENTER_BOTH
 	}
 }
