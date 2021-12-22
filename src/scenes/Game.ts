@@ -1,7 +1,7 @@
 import Phaser from 'phaser'
 import HazardsController from '~/HazardsController';
 import PlayerController from '~/PlayerController';
-
+import { sharedInstance as events } from '~/EventCenter';
 import { DPR } from '../dpr'
 
 const imagePath = (name: string) => {
@@ -38,6 +38,11 @@ export default class Game extends Phaser.Scene{
   }
 
   create(){
+    var parentObj = this;
+    this.input.keyboard.on('keydown-' + 'C', function (event) {
+      parentObj.scene.start('game');
+      events.emit('game-start');
+    });
     const map = this.make.tilemap({key: 'tilemap'}); // making tilemap
     const tileset = map.addTilesetImage('sheet', 'tiles'); // setting a tileset using sheet. tileset from Tiled
 
@@ -94,7 +99,13 @@ export default class Game extends Phaser.Scene{
 
   update(t: number, dt: number){
     if (!this.playerController){
+      console.log("hey");
       return;
+    }
+    if (dt > 15){ // limit dt so no ridiculous speeds happen when play again pressed
+      dt = 15;
+    }else if (dt < 5){
+      dt = 5;
     }
     this.playerController.update(dt);
   }

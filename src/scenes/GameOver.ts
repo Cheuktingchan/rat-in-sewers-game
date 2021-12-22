@@ -25,7 +25,7 @@ export default class GameOver extends Phaser.Scene{
       parentObj.scene.start('game');
       events.emit('game-start');
     });
-    
+
     const play_again_text = this.add.text(play_again.x,play_again.y, 'Play Again (C)', {
       color: '#000000'
     });

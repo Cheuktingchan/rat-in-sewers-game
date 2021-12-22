@@ -29,9 +29,11 @@ export default class UI extends Phaser.Scene{
 
   events.on('game-over', ()=> {
     this.scene.stop();
+    this.time_left = 15;
   });
 
-  events.on('game-over', ()=> {
+  events.on('game-start', ()=> {
+    this.scene.stop();
     this.time_left = 15;
   });
   }
