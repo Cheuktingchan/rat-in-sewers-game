@@ -13,6 +13,7 @@ export default class PlayerController{
   berserk: boolean = false;
   timer_length: number = 15;
   collided_this_frame: boolean = false;
+  delta : number = 0;
 
   constructor(scene: Phaser.Scene, sprite: Phaser.Physics.Matter.Sprite, cursors: Phaser.Types.Input.Keyboard.CursorKeys, hazards: HazardsController){
     this.scene = scene;
@@ -140,6 +141,7 @@ export default class PlayerController{
   }
 
   update(dt: number){
+    this.delta = dt/10;
     if (!this.collided_this_frame){ //checks if listener was called this frame
       this.touching_side = 'none';
     }
@@ -171,20 +173,20 @@ export default class PlayerController{
 
     if (this.cursors.left.isDown && !this.berserk){ // rat walks left
       this.sprite.flipX = true;
-      this.sprite.setVelocityX(-speed);
+      this.sprite.setVelocityX(-speed * this.delta);
       if (this.touching_side == 'left'){
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
       }
     }else if (this.cursors.right.isDown || this.berserk){ // rat walks right
       this.sprite.flipX = false;
-      this.sprite.setVelocityX(speed);
+      this.sprite.setVelocityX(speed * this.delta);
       if (this.touching_side == 'right'){
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
       }
     }else{ //rat idles
-      this.sprite.setVelocityX(0);
+      this.sprite.setVelocityX(0 * this.delta);
       this.stateMachine.setState('idle');
     }
 
@@ -194,7 +196,7 @@ export default class PlayerController{
   }
 
   private jumpOnEnter(){
-    this.sprite.setVelocityY(-5);
+    this.sprite.setVelocityY(-5 * this.delta);
     this.sprite.anims.play('player-jump');
   }
 
@@ -202,14 +204,14 @@ export default class PlayerController{
     const speed = 5;
     if (this.cursors.left.isDown && !this.berserk){ // rat faces left
       this.sprite.flipX = true;
-      this.sprite.setVelocityX(-speed);
+      this.sprite.setVelocityX(-speed * this.delta);
       if (this.touching_side == 'left'){
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
       }
     }else if (this.cursors.right.isDown){ // rat faces right
       this.sprite.flipX = false;
-      this.sprite.setVelocityX(speed);
+      this.sprite.setVelocityX(speed * this.delta);
       if (this.touching_side == 'right'){
         this.sprite.body.velocity.x = 0;
         this.stateMachine.setState('wall-climb');
@@ -224,7 +226,7 @@ export default class PlayerController{
 
   private wallClimbOnUpdate(){
     if ((this.cursors.left.isDown && this.touching_side == 'left') || ((this.cursors.right.isDown || this.berserk) && this.touching_side == 'right')){
-      this.sprite.setVelocityY(-3);
+      this.sprite.setVelocityY(-3 * this.delta);
     }else{
       if (!this.berserk){
         this.jumpDetection();

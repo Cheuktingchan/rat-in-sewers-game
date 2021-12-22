@@ -5,17 +5,28 @@ import GameOver  from './scenes/GameOver'
 import UI from './scenes/UI'
 import Win from	'./scenes/Win'
 
+import { DPR } from './dpr'
+
+const width = 800;
+const height = 600;
+
 const config: Phaser.Types.Core.GameConfig = {
 	type: Phaser.AUTO,
-	width: 800,
-	height: 600,
+	width: width,
+	height: height,
 	physics: {
 		default: 'matter',// matter.js physics
 		matter: {
 			debug: false
 		}
 	},
-	scene: [Game,GameOver, UI, Win]
+	scene: [Game,GameOver, UI, Win],
+	scale: {
+		zoom: 1/DPR,
+		width: width * DPR,
+		height: height * DPR,
+		autoCenter: Phaser.Scale.Center.CENTER_BOTH
+	}
 }
 
 export default new Phaser.Game(config)
