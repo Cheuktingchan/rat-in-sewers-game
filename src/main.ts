@@ -25,7 +25,7 @@ const config: Phaser.Types.Core.GameConfig = {
 		zoom: 1,
 		width: width,
 		height: height,
-		autoCenter: Phaser.Scale.Center.CENTER_BOTH
+		autoCenter: Phaser.Scale.Center.CENTER_HORIZONTALLY
 	}
 }
 
